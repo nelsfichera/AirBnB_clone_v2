@@ -19,12 +19,12 @@ class FileStorage:
         """Returns a dictionary of models currently in storage"""
         if cls is not None:
             classDict = {}
-            for key, value in self.__objects.items():
-                if cls == value.__class__:
+            for key, value in FileStorage.__objects.items():
+                if cs == type(value):
                     classDict[key] = value
             return classDict
         else:
-            return self.__objects
+            return FileStorage.__objects
 
     def new(self, obj):
         """Adds new object to storage dictionary"""
@@ -51,7 +51,10 @@ class FileStorage:
 
     def delete(self, obj=None):
         """Deletes objects from __objects dict"""
-        if obj is not None:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            if key in self.__objects.keys():
-                del self.__objects[key]
+        if obj:
+            objDict = obj.to_dict()
+            objDict = "{}.{}".format(objDict["__class__"], objDict["id"])
+            try:
+                self.__objects.pop(objDict)
+            except:
+                pass
