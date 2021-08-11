@@ -37,8 +37,8 @@ class DBStorage():
             list_object = self.__session.query(cls).all()
         else:
             classList = [Amenity, Review, State, Place, User, City]
-            for cls in classList:
-                list_object += self.__session.query(cls)
+            for cs in classList:
+                list_object += self.__session.query(cs)
         for obj in list_object:
             key = "{}.{}".format(obj.__class__.__name__, str(obj.id))
             dict_all[key] = obj
