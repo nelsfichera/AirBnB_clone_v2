@@ -41,7 +41,7 @@ class DBStorage():
             classList = ["Amenity", "Review", "State", "Place", "User", "City"]
             for className in classList:
                 obj = self.__session.query(eval(className)).all()
-                strKey = "{}.{}".format(type(obj).__name__, obj.id)
+                strKey = "{}.{}".format(obj.__name__, str(obj.id))
                 setattr(objDict, strKey, obj)
         return (objDict)
 
