@@ -126,20 +126,24 @@ class HBNBCommand(cmd.Cmd):
                 try:
                     key = i.split("=")[0]
                     val = i.split("=")[1]
-                    if hasattr(new_instance, key) is True:
-                        val.replace("_", " ")
-                        try:
-                            val = eval(val)
-                        except:
-                            pass
-                        setattr(new_instance, key, val)
-                except (ValueError, IndexError):
-                    pass
+                    if val[0] == '"':
+                        val = val.replace("_", " ")
+                        val = val[1:-1]
+                    try:
+                        float(val)
+                    except ValueError:
+                        pass
+                    try:
+                        int(val)
+                    except ValueError:
+                        pass
+                    setattr(new_instance, key, val)
+                except ValueError:
+                    continue
             new_instance.save()
             print(new_instance.id)
-        except:
+        except NameError:
             print("** class doesn't exist **")
-            return
 
     def help_create(self):
         """ Help information for the create method """
@@ -281,7 +285,7 @@ class HBNBCommand(cmd.Cmd):
         # first determine if kwargs or args
         if '{' in args[2] and '}' in args[2] and type(eval(args[2])) is dict:
             kwargs = eval(args[2])
-            args = []  # reformat kwargs into list, ex: [<name>, <value>, ...]
+            args = []  # reformat kwargs into list, ex: [<name>, <val>, ...]
             for k, v in kwargs.items():
                 args.append(k)
                 args.append(v)
@@ -310,22 +314,22 @@ class HBNBCommand(cmd.Cmd):
         # retrieve dictionary of current objects
         new_dict = storage.all()[key]
 
-        # iterate through attr names and values
+        # iterate through attr names and vals
         for i, att_name in enumerate(args):
             # block only runs on even iterations
             if (i % 2 == 0):
-                att_val = args[i + 1]  # following item is value
+                att_val = args[i + 1]  # following item is val
                 if not att_name:  # check for att_name
                     print("** attribute name missing **")
                     return
-                if not att_val:  # check for att_value
-                    print("** value missing **")
+                if not att_val:  # check for att_val
+                    print("** val missing **")
                     return
                 # type cast as necessary
                 if att_name in HBNBCommand.types:
                     att_val = HBNBCommand.types[att_name](att_val)
 
-                # update dictionary with name, value pair
+                # update dictionary with name, val pair
                 new_dict.__dict__.update({att_name: att_val})
 
         new_dict.save()  # save updates to file
