@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''manages DBstorage'''
 from sqlalchemy.orm import sessionmaker, scoped_session, Session
-from sqlalchemy import (create_engine)
+from sqlalchemy import create_engine
 from models.base_model import Base
 from models.amenity import Amenity
 from models.review import Review
