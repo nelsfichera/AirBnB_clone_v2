@@ -31,19 +31,18 @@ class DBStorage():
 
     def all(self, cls=None):
         '''returns the dict of all objs'''
-        objDict = {}
+        dict_all = {}
+        list_object = []
         if cls:
-            query = self.__session.query(cls).all()
-            for obj in query:
-                strKey = "{}.{}".format(type(obj).__name__, obj.id)
-                objDict[strKey] = obj
+            list_object = self.__session.query(cls).all()
         else:
-            classList = ["Amenity", "Review", "State", "Place", "User", "City"]
-            for className in classList:
-                obj = self.__session.query(eval(className)).all()
-                strKey = "{}.{}".format(type(obj).__name__, obj.id)
-                setattr(objDict, strKey, obj)
-        return (objDict)
+            classList = [Amenity, Review, State, Place, User, City]
+            for cls in classList:
+                list_object += self.__session.query(cls)
+        for obj in list_object:
+            key = "{}.{}".format(obj.__class__.__name__, str(obj.id))
+            dict_all[key] = obj
+        return dict_all
 
     def new(self, obj):
         '''adds a new object to the session'''
