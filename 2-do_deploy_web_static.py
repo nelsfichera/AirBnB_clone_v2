@@ -2,7 +2,7 @@
 '''module for storing do_deploy'''
 from fabric.api import put, run, env
 from os.path import exists
-env.hosts = ['104.196.35.45', '@34.73.125.171']
+env.hosts = ['104.196.35.45', '34.73.125.171']
 
 
 def do_deploy(archive_path):
