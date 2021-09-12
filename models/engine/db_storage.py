@@ -31,22 +31,23 @@ class DBStorage():
 
     def all(self, cls=None):
         '''returns the dict of all objs'''
-        dict_all = {}
-        list_object = []
+        objDict = {}
         if cls:
-            list_object = self.__session.query(cls).all()
+            query = self.__session.query(cls).all()
+            for obj in query:
+                strKey = "{}.{}".format(type(obj).__name__, obj.id)
+                objDict[strKey] = obj
         else:
-            classList = [Amenity, Review, State, Place, User, City]
-            for cs in classList:
-                list_object += self.__session.query(cs)
-        for obj in list_object:
-            key = "{}.{}".format(obj.__class__.__name__, str(obj.id))
-            dict_all[key] = obj
-        return dict_all
+            classList = ["Amenity", "Review", "State", "Place", "User", "City"]
+            for className in classList:
+                obj = self.__session.query(eval(className)).all()
+                strKey = "{}.{}".format(className, obj.id)
+                setattr(objDict, strKey, obj)
+        return (objDict)
 
     def new(self, obj):
         '''adds a new object to the session'''
-        self.__session.add(obj)
+        self.__sesion.add(obj)
 
     def save(self):
         '''commits session to the database'''
@@ -62,3 +63,7 @@ class DBStorage():
         session = sessionmaker(expire_on_commit=False, bind=self.__engine)
         Session = scoped_session(session)
         self.__session = Session()
+
+    def close(self):
+        '''closes the session'''
+        self.__session.close()

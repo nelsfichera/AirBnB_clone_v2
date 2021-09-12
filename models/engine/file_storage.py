@@ -13,8 +13,8 @@ class FileStorage:
         if cls is None:
             return FileStorage.__objects
         classDict = {}
-        for key, value in self.__objects.items():
-            if isinstance(value, cls):
+        for key, value in FileStorage.__objects.items():
+            if cls == type(value):
                 classDict[key] = value
         return classDict
 
@@ -58,7 +58,13 @@ class FileStorage:
     def delete(self, obj=None):
         """Deletes objects from __objects dict"""
         if obj:
-            key = "{}.{}".format(obj.__class__.__name__, obj.id)
-            if key in self.__objects:
-                del self.__objects[key]
-            self.save()
+            objDict = obj.to_dict()
+            objDict = "{}.{}".format(objDict["__class__"], objDict["id"])
+            try:
+                self.__objects.pop(objDict)
+            except Exception:
+                pass
+
+    def close(self):
+        '''deserializes json'''
+        reload(self)
