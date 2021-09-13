@@ -21,3 +21,8 @@ class State(BaseModel, Base):
     def cities(self):
         """ Getter for filestorage """
         return [city for city in State.cities if city.state_id == self.id]
+
+    if __name__ == '__main__':
+    # Storage is defined prior to importing these modules, but needs to be
+    # imported here if running stand-alone.
+    from models import storage
