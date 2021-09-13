@@ -20,4 +20,9 @@ class State(BaseModel, Base):
     @property
     def cities(self):
         """ Getter for filestorage """
-        return [city for city in State.cities if city.state_id == self.id]
+        objDict = models.storage.all(City)
+            cities_list = []
+            for key, value in objDict.items():
+                if value.state_id == self.id:
+                    cities_list.append(value)
+            return (cities_list)
