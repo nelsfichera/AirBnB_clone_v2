@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 '''module for storing flask'''
 from flask import Flask, render_template
-from models.__init__ import storage
+from models.engine import storage
 from models.state import State
 from models.amenity import Amenity
 
